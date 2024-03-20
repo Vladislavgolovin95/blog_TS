@@ -31,7 +31,7 @@ const Item = styled.li`
 
 const StyledPostBtn = styled(Btn)`
   margin: 0 auto;
-  width: 100px;
+  max-width: 100px;
   padding: 5px;
   color: red;
 `
