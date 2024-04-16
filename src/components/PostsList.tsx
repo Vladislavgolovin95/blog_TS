@@ -7,7 +7,7 @@ interface IPostsListProps {
 }
 
 export const PostsList: React.FC<IPostsListProps> = (props) => {
-  const { posts, removePost  } = props;
+  const { posts, removePost } = props;
 
   return <ul>
     { 

@@ -1,16 +1,21 @@
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-import { InputField } from "./InputField";
-import { Btn } from "./Btn";
-import { PostsList } from "./PostsList";
+import { v4 as uuidv4 } from "uuid";
+import { addDataToFirestore, getDataToFirestore } from "../firebase/firebase";
 import { IPost } from "../types/data";
+import { Btn } from "./Btn";
+import { InputField } from "./InputField";
+import { PostsList } from "./PostsList";
 
 export const App: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState<IPost[]>([]);
+
+  useEffect(() => {
+    getDataToFirestore()
+      .then(data => setPosts(data));
+  }, []);
 
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -27,15 +32,14 @@ export const App: React.FC = () => {
   };
   
   const addPost = () => {
+    const id = uuidv4();
+
     if (title && description) {
-      setPosts([
-        ...posts,
-        {
-          id: uuidv4(),
-          title: title,
-          description: description,
-        },
-      ]);
+      addDataToFirestore(id, title, description);
+
+      getDataToFirestore()
+      .then(data => setPosts(data));
+
       setTitle("");
       setDescription("");
     }
